@@ -1,20 +1,23 @@
 import logging
 import pandas as pd
+import requests
 from telegram import Update
 from telegram.ext import Updater, CommandHandler, CallbackContext
 
-# Enable logging
+# إعداد التسجيل
 logging.basicConfig(
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
     level=logging.INFO
 )
 logger = logging.getLogger(__name__)
 
-# Telegram Bot Token
-TOKEN = '7863509137:AAEmoyimZV-XVHcA7aBT15e4IRoxB9WR0hY'
+# أدخل توكن البوت من BotFather هنا
+TOKEN = 'YOUR_TELEGRAM_BOT_TOKEN'
+
+# السماح فقط لحساب محدد باستخدام البوت
 ALLOWED_USERNAME = 'tayoob07_bot'
 
-# Dummy stock data
+# دالة وهمية لإرجاع بيانات الأسهم
 def get_stock_movers():
     data = {
         'Symbol': ['AAPL', 'TSLA', 'AMZN'],
@@ -24,24 +27,26 @@ def get_stock_movers():
     df = pd.DataFrame(data)
     return df
 
-# Start command
+# أوامر البوت
 def start(update: Update, context: CallbackContext):
     if update.effective_user.username != ALLOWED_USERNAME:
         update.message.reply_text("🚫 غير مصرح لك باستخدام هذا البوت.")
         return
     update.message.reply_text('مرحباً! أرسل /movers للحصول على تحركات السوق.')
 
-# Movers command
 def movers(update: Update, context: CallbackContext):
     if update.effective_user.username != ALLOWED_USERNAME:
         update.message.reply_text("🚫 غير مصرح لك باستخدام هذا البوت.")
         return
     df = get_stock_movers()
-    message = "📈 تحركات السوق:\n\n"
+    message = "📈 تحركات السوق:
+
+"
     for _, row in df.iterrows():
         message += f"{row['Symbol']}: ${row['Price']} ({row['Change']}%)\n"
     update.message.reply_text(message)
 
+# تشغيل البوت
 def main():
     updater = Updater(TOKEN, use_context=True)
     dp = updater.dispatcher
