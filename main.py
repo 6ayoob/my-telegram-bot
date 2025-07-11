@@ -10,7 +10,7 @@ logger = logging.getLogger(__name__)
 # المتغيرات البيئية (ستتم قراءتها من Render)
 import os
 TOKEN = os.getenv('BOT_TOKEN')
-ALLOWED_USERNAME = os.getenv('ALLOWED_USERNAME')
+ALLOWED_USERNAME = os.getenv('tayoob07')
 
 # دالة وهمية لتحركات السوق
 def get_stock_movers():
@@ -22,13 +22,13 @@ def get_stock_movers():
     return pd.DataFrame(data)
 
 def start(update: Update, context: CallbackContext):
-    if update.effective_user.username != ALLOWED_USERNAME:
+    if update.effective_user.username != tayoob07:
         update.message.reply_text("🚫 غير مصرح لك باستخدام هذا البوت.")
         return
     update.message.reply_text('مرحباً! أرسل /movers للحصول على تحركات السوق.')
 
 def movers(update: Update, context: CallbackContext):
-    if update.effective_user.username != ALLOWED_USERNAME:
+    if update.effective_user.username != tayoob07:
         update.message.reply_text("🚫 غير مصرح لك باستخدام هذا البوت.")
         return
     df = get_stock_movers()
